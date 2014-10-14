@@ -57,7 +57,7 @@ def changeeffect(EFFECT):
     camera.image_effect = EFFECT
     camera.start_preview()
 
-effects = ['negative','watercolor','sketch','emboss','colorswap','cartoon','none']
+effects = ['solarize','oilpaint','hatch','gpen','pastel','washedout','posterise','negative','sketch','emboss','colorswap','cartoon','none']
 effectnumber = 0
 initcamera()
 # BUILD A SCREEN
@@ -65,7 +65,7 @@ pygame.init()
 pygame.mouse.set_visible(0)
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 black = pygame.Color(0, 0, 0)
-textcol = pygame.Color(255, 0, 0)
+textcol = pygame.Color(255, 255, 255)
 #screen.fill(black)
 
 while True:
@@ -78,11 +78,14 @@ while True:
  if effect == 1:
   effect = effects[effectnumber] 
   effectnumber = (effectnumber + 1) % len(effects)
+ # dotext('', 150, 150)
   changeeffect(effect)
+  dotext(effect, 100, 150)
   sleep(1)
+  dotext('', 150, 150)
  if my_input == 1:
   count=0
-  while (count < 2):
+  while (count < 4):
      camera.start_preview()
      # TAKE A PHOTO
      now = time.strftime("%Y%m%d%H%M%S")
@@ -103,6 +106,7 @@ while True:
      playsound = "/usr/bin/play /home/pi/camera-shutter.oga &"
      #os.system(playsound)
      subprocess.call(playsound,shell=True)
+     #sleep(.5)
      camera.capture(name, format='jpeg', resize=(WIDTH,HEIGHT))
      #camera.stop_preview()
  
@@ -113,10 +117,11 @@ while True:
      makeborder = "gm convert " + name + " -border 8x2 new-" + name
      os.system(makeborder) 
      # WAIT A BIT
-     sleep(1)
+     #sleep(1)
      count+=1
  # camera.start_preview()
   # CEATE PHOTOBOOTH STRIPS OF PHOTOS
+  dotext('thinking..', 150, 100)
   singlestrip = "gm convert $(ls new*.jpg) -append singlestrip.jpg"
   os.system(singlestrip)
   doublestrip = "gm convert singlestrip.jpg singlestrip.jpg +append strip-" + now + ".jpg"
@@ -124,6 +129,11 @@ while True:
   # DELETE TEMPORARY FILES
   cleanup = "rm new*.jpg *strip.jpg"
   os.system(cleanup)
+  dotext('printing..', 150, 100)
+  printing = "lp"
+  #os.system(printing)
+  dotext('', 150, 150)
+  changeeffect('none')
 
   # CLOSE CLEANLY AND EXIT
  sleep(0.5)
