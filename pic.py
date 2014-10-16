@@ -36,7 +36,6 @@ def dotext(countdown,FONTSIZE,LEFT):
 
 # INIT CAMERA
 def initcamera():
-#    camera = picamera.PiCamera()
     camera.vflip = True
     camera.hflip = False
     camera.brightness = 60
@@ -45,15 +44,7 @@ def initcamera():
     camera.start_preview()
 
 def changeeffect(EFFECT):
-  #  camera = picamera.PiCamera()
-    #camera.stop_preview()
     camera.stop_preview()
- #   camera.close()
-#    sleep(2)
-#    camera.vflip = True
-#    camera.hflip = False
-#    camera.brightness = 60
-#    camera.led = False
     camera.image_effect = EFFECT
     camera.start_preview()
 
@@ -78,7 +69,6 @@ while True:
  if effect == 1:
   effect = effects[effectnumber] 
   effectnumber = (effectnumber + 1) % len(effects)
- # dotext('', 150, 150)
   changeeffect(effect)
   dotext(effect, 100, 150)
   sleep(1)
@@ -104,11 +94,8 @@ while True:
      dotext('', 200, 200)
  
      playsound = "/usr/bin/play /home/pi/camera-shutter.oga &"
-     #os.system(playsound)
      subprocess.call(playsound,shell=True)
-     #sleep(.5)
      camera.capture(name, format='jpeg', resize=(WIDTH,HEIGHT))
-     #camera.stop_preview()
  
      #READ IMAGE AND PUT ON SCREEN
      #img = pygame.image.load(name)
@@ -116,10 +103,7 @@ while True:
      #pygame.display.update()    
      makeborder = "gm convert " + name + " -border 8x2 new-" + name
      os.system(makeborder) 
-     # WAIT A BIT
-     #sleep(1)
      count+=1
- # camera.start_preview()
   # CEATE PHOTOBOOTH STRIPS OF PHOTOS
   dotext('thinking..', 150, 100)
   singlestrip = "gm convert $(ls new*.jpg) -append singlestrip.jpg"
